@@ -1,13 +1,13 @@
 {
-  "name": "obsidian-react-starter",
+  "name": "obsidian-idea-clock",
   "version": "0.0.0",
-  "description": "Obsidian + ReactJS",
-  "author": "liamcain",
+  "description": "Obsidian Idea Clock",
+  "author": "Jonathan Miller",
   "main": "main.js",
   "license": "MIT",
   "scripts": {
     "lint": "eslint . --ext .ts",
-    "dev": "npm run lint && rollup -c",
+    "dev": "npm run lint && rollup -c --watch",
     "build:nolint": "NODE_ENV=production rollup -c",
     "build": "NODE_ENV=production npm run lint && rollup -c",
     "test": "jest",

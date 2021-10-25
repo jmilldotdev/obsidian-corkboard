@@ -1,10 +1,10 @@
 {
-  "id": "react-starter",
-  "name": "React Starter",
-  "description": "Obsidian + ReactJS",
+  "id": "obsidian-idea-clock",
+  "name": "Obsidian Idea Clock",
+  "description": "Obsidian Idea Clock",
   "version": "0.0.0",
-  "author": "Liam Cain",
-  "authorUrl": "https://github.com/liamcain/",
+  "author": "Jonathan Miller",
+  "authorUrl": "https://github.com/jmilldotdev/",
   "isDesktopOnly": true,
   "minAppVersion": "0.10.8"
 }
