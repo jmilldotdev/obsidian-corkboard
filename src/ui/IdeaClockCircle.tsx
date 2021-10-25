@@ -1,58 +1,52 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import styled from "styled-components";
 import IdeaClockNote from "./IdeaClockNote";
+import { NoteInfo } from "./IdeaClockView";
+
+interface StyledCircleProps {
+  radius: number;
+}
 
 const StyledCircle = styled.div`
-  background: orange;
-  width: 200px;
-  height: 200px;
+  background-color: #9e8aff;
+  width: ${({ radius }: StyledCircleProps) => radius * 2}px;
+  height: ${({ radius }: StyledCircleProps) => radius * 2}px;
   border-radius: 50%;
   margin: 40px auto 40px;
   position: relative;
 `;
 
+interface StyledCircleHoldProps {
+  radius: number;
+}
+
 const StyledCircleHold = styled.div`
   position: absolute;
-  left: 90px;
-  top: 90px;
+  left: ${({ radius }: StyledCircleHoldProps) => radius - 10}px;
+  top: ${({ radius }: StyledCircleHoldProps) => radius - 10}px;
 `;
 
-const IdeaClockCircle = (): JSX.Element => {
-  const [square, setSquare] = useState([]);
+interface IdeaClockCircleProps {
+  noteCircleInfo: NoteInfo[];
+  radius: number;
+}
 
-  const buildCircle = () => {
-    const num = 7; //Number of Square to be generate
-    const type = 1;
-    const radius = "100"; //distance from center
-    const start = -90; //shift start from 0
-    const slice = (360 * type) / num;
-
-    const items = [];
-    let i;
-    for (i = 0; i < num; i++) {
-      const rotate = slice * i + start;
-      const rotateReverse = rotate * -1;
-
-      items.push({
-        radius: radius,
-        rotate: rotate,
-        rotateReverse: rotateReverse,
-      });
-    }
-    setSquare(items);
-  };
-
-  useEffect(() => {
-    buildCircle();
-  }, []);
-
+const IdeaClockCircle = ({
+  noteCircleInfo,
+  radius,
+}: IdeaClockCircleProps): JSX.Element => {
   return (
     <div>
-      <StyledCircle>
-        <StyledCircleHold>
-          {square.map(function (value, index) {
-            return <IdeaClockNote css={value} num={index + 1} />;
-          })}
+      <StyledCircle radius={radius}>
+        <StyledCircleHold radius={radius}>
+          {noteCircleInfo &&
+            noteCircleInfo.map((value, i) => {
+              return (
+                <div key={i} className="IdeaClock__circleNote">
+                  <IdeaClockNote noteInfo={value} />
+                </div>
+              );
+            })}
         </StyledCircleHold>
       </StyledCircle>
     </div>

@@ -1,9 +1,10 @@
 import React from "react";
 import styled from "styled-components";
+import { NoteInfo } from "./IdeaClockView";
 
 const StyledNote = styled.div`
   position: absolute;
-  background: red;
+  background: #d669bc;
   -webkit-transition: all 2s linear;
   -moz-transition: all 2s linear;
   transition: transform 2s linear;
@@ -14,29 +15,24 @@ const StyledNote = styled.div`
 `;
 
 interface IdeaClockNoteProps {
-  num: number;
-  css: {
-    rotate: number;
-    radius: number;
-    rotateReverse: number;
-  };
+  noteInfo: NoteInfo;
 }
 
-const IdeaClockNote = ({ num, css }: IdeaClockNoteProps): JSX.Element => {
+const IdeaClockNote = ({ noteInfo }: IdeaClockNoteProps): JSX.Element => {
   return (
     <StyledNote
       style={{
         transform:
           "rotate(" +
-          css.rotate +
+          noteInfo.rotate +
           "deg) translate(" +
-          css.radius +
+          noteInfo.radius +
           "px) rotate(" +
-          css.rotateReverse +
+          noteInfo.rotateReverse +
           "deg)",
       }}
     >
-      {num}
+      {noteInfo.title}
     </StyledNote>
   );
 };

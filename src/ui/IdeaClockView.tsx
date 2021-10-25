@@ -1,46 +1,74 @@
+import { TFile } from "obsidian";
 import React, { useState } from "react";
 import IdeaClockPlugin from "../index";
 import IdeaClockCircle from "./IdeaClockCircle";
 
+export interface NoteInfo {
+  title: string;
+  rotate: number;
+  radius: number;
+  rotateReverse: number;
+}
+
+interface IdeaClockViewProps {
+  plugin: IdeaClockPlugin;
+}
+
 export default function IdeaClockView({
   plugin,
-}: {
-  plugin: IdeaClockPlugin;
-}): JSX.Element {
-  const [numNodes, setNumNodes] = useState(2);
-  const [notes, setNotes] = useState([]);
+}: IdeaClockViewProps): JSX.Element {
+  const [numNodes, setNumNodes] = useState("12");
+  const [noteCircleInfo, setNoteCircleInfo] = useState<NoteInfo[]>([]);
+  const radius = 300;
+
+  const randomNotesHandler = async (): Promise<void> => {
+    const notes = await plugin.handlegetRandomNotes(parseInt(numNodes));
+    buildCircle(notes);
+  };
+
+  const randomNotesFromSearchHandler = async (): Promise<void> => {
+    const notes = await plugin.handlegetRandomNotesFromSearch(
+      parseInt(numNodes)
+    );
+    buildCircle(notes);
+  };
+
+  const buildCircle = (notes: TFile[]) => {
+    const num = notes.length;
+    const type = 1;
+    const start = -90;
+    const slice = (360 * type) / num;
+
+    const items: NoteInfo[] = [];
+    let i;
+    for (i = 0; i < num; i++) {
+      const rotate = slice * i + start;
+      const rotateReverse = rotate * -1;
+
+      items.push({
+        title: notes[i].basename,
+        radius: radius,
+        rotate: rotate,
+        rotateReverse: rotateReverse,
+      });
+    }
+    setNoteCircleInfo(items);
+  };
 
   return (
     <>
       <div className="IdeaClock__container">
         <p>Notes</p>
         <div className="IdeaClock__notes">
-          <IdeaClockCircle />
-          {notes.map((note, i) => (
-            <div key={i} className="IdeaClock__note">
-              {note.basename}
-            </div>
-          ))}
+          <IdeaClockCircle noteCircleInfo={noteCircleInfo} radius={radius} />
         </div>
       </div>
       <input
         value={numNodes}
-        onChange={(event) =>
-          setNumNodes(parseInt(event.target.value.replace(/\D/, "")))
-        }
+        onChange={(event) => setNumNodes(event.target.value)}
       />
-      <button
-        onClick={async () =>
-          setNotes(await plugin.handlegetRandomNotes(numNodes))
-        }
-      >
-        Get notes
-      </button>
-      <button
-        onClick={async () =>
-          setNotes(await plugin.handlegetRandomNotesFromSearch(numNodes))
-        }
-      >
+      <button onClick={randomNotesHandler}>Get notes</button>
+      <button onClick={randomNotesFromSearchHandler}>
         Get notes from search
       </button>
     </>
