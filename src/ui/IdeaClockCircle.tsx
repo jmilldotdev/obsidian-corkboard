@@ -8,10 +8,11 @@ interface StyledCircleProps {
 }
 
 const StyledCircle = styled.div`
-  background-color: #9e8aff;
   width: ${({ radius }: StyledCircleProps) => radius * 2}px;
   height: ${({ radius }: StyledCircleProps) => radius * 2}px;
   border-radius: 50%;
+  border-color: #9e8aff;
+  border: solid;
   margin: 40px auto 40px;
   position: relative;
 `;
@@ -22,18 +23,20 @@ interface StyledCircleHoldProps {
 
 const StyledCircleHold = styled.div`
   position: absolute;
-  left: ${({ radius }: StyledCircleHoldProps) => radius - 10}px;
-  top: ${({ radius }: StyledCircleHoldProps) => radius - 10}px;
+  left: ${({ radius }: StyledCircleHoldProps) => radius - radius / 10}px;
+  top: ${({ radius }: StyledCircleHoldProps) => radius - radius / 10}px;
 `;
 
 interface IdeaClockCircleProps {
   noteCircleInfo: NoteInfo[];
   radius: number;
+  selectionCallback: (index: number) => void;
 }
 
 const IdeaClockCircle = ({
   noteCircleInfo,
   radius,
+  selectionCallback,
 }: IdeaClockCircleProps): JSX.Element => {
   return (
     <div>
@@ -43,7 +46,11 @@ const IdeaClockCircle = ({
             noteCircleInfo.map((value, i) => {
               return (
                 <div key={i} className="IdeaClock__circleNote">
-                  <IdeaClockNote noteInfo={value} />
+                  <IdeaClockNote
+                    key={i}
+                    noteInfo={value}
+                    selectionCallback={selectionCallback}
+                  />
                 </div>
               );
             })}

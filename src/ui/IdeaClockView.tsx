@@ -4,7 +4,9 @@ import IdeaClockPlugin from "../index";
 import IdeaClockCircle from "./IdeaClockCircle";
 
 export interface NoteInfo {
+  index: number;
   title: string;
+  path: string;
   rotate: number;
   radius: number;
   rotateReverse: number;
@@ -19,17 +21,24 @@ export default function IdeaClockView({
 }: IdeaClockViewProps): JSX.Element {
   const [numNodes, setNumNodes] = useState("12");
   const [noteCircleInfo, setNoteCircleInfo] = useState<NoteInfo[]>([]);
+  const [selectedNote, setSelectedNote] = useState<number | null>(null);
   const radius = 300;
 
   const randomNotesHandler = async (): Promise<void> => {
     const notes = await plugin.handlegetRandomNotes(parseInt(numNodes));
-    buildCircle(notes);
+    postFillHandler(notes);
   };
 
   const randomNotesFromSearchHandler = async (): Promise<void> => {
     const notes = await plugin.handlegetRandomNotesFromSearch(
       parseInt(numNodes)
     );
+    postFillHandler(notes);
+  };
+
+  const postFillHandler = (notes: TFile[]): void => {
+    console.log(notes);
+    setSelectedNote(null);
     buildCircle(notes);
   };
 
@@ -46,7 +55,9 @@ export default function IdeaClockView({
       const rotateReverse = rotate * -1;
 
       items.push({
+        index: i,
         title: notes[i].basename,
+        path: notes[i].path,
         radius: radius,
         rotate: rotate,
         rotateReverse: rotateReverse,
@@ -58,9 +69,12 @@ export default function IdeaClockView({
   return (
     <>
       <div className="IdeaClock__container">
-        <p>Notes</p>
         <div className="IdeaClock__notes">
-          <IdeaClockCircle noteCircleInfo={noteCircleInfo} radius={radius} />
+          <IdeaClockCircle
+            noteCircleInfo={noteCircleInfo}
+            radius={radius}
+            selectionCallback={setSelectedNote}
+          />
         </div>
       </div>
       <input
@@ -71,6 +85,7 @@ export default function IdeaClockView({
       <button onClick={randomNotesFromSearchHandler}>
         Get notes from search
       </button>
+      <p>Selected note: {selectedNote === null ? "None" : selectedNote}</p>
     </>
   );
 }
