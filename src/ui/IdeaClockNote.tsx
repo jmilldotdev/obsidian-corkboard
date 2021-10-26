@@ -1,6 +1,6 @@
 import React, { useContext } from "react";
 import styled from "styled-components";
-import { SelectedNoteContext } from "./clockContext";
+import { AppContext, SelectedNoteContext } from "./clockContext";
 import { NoteInfo } from "./IdeaClockView";
 
 interface StyledNoteProps {
@@ -29,12 +29,19 @@ const IdeaClockNote = ({ noteInfo }: IdeaClockNoteProps): JSX.Element => {
   const selectedNote = useContext(SelectedNoteContext);
   const isSelected = index === selectedNote.index;
 
+  const app = useContext(AppContext);
+
   return (
     <StyledNote
       isSelected={isSelected}
-      onClick={() => {
-        selectedNote.setSelectedNoteIndex(index);
-        console.log(noteInfo.path);
+      onClick={(e) => {
+        if (e.ctrlKey || e.metaKey) {
+          console.log("ctrl key pressed");
+          console.log(app.workspace.getActiveFile());
+          app.workspace.openLinkText(noteInfo.path, "", true, false);
+        } else {
+          selectedNote.setSelectedNoteIndex(index);
+        }
       }}
       style={{
         transform:

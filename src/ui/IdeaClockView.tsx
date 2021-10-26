@@ -1,7 +1,7 @@
 import { TFile } from "obsidian";
 import React, { useState } from "react";
 import IdeaClockPlugin from "../index";
-import { SelectedNoteContext } from "./clockContext";
+import { AppContext, SelectedNoteContext } from "./clockContext";
 import IdeaClockCircle from "./IdeaClockCircle";
 
 export interface NoteInfo {
@@ -75,28 +75,31 @@ export default function IdeaClockView({
   };
 
   return (
-    <SelectedNoteContext.Provider
-      value={{
-        index: selectedNoteIndex,
-        setSelectedNoteIndex,
-      }}
-    >
-      <div className="IdeaClock__container">
-        <div className="IdeaClock__notes">
-          <IdeaClockCircle noteCircleInfo={noteCircleInfo} radius={radius} />
+    <AppContext.Provider value={plugin.app}>
+      <SelectedNoteContext.Provider
+        value={{
+          index: selectedNoteIndex,
+          setSelectedNoteIndex,
+        }}
+      >
+        <div className="IdeaClock__container">
+          <div className="IdeaClock__notes">
+            <IdeaClockCircle noteCircleInfo={noteCircleInfo} radius={radius} />
+          </div>
         </div>
-      </div>
-      <input
-        value={numNodes}
-        onChange={(event) => setNumNodes(event.target.value)}
-      />
-      <button onClick={randomNotesHandler}>Get notes</button>
-      <button onClick={randomNotesFromSearchHandler}>
-        Get notes from search
-      </button>
-      <p>
-        Selected note: {selectedNoteIndex === null ? "None" : selectedNoteIndex}
-      </p>
-    </SelectedNoteContext.Provider>
+        <input
+          value={numNodes}
+          onChange={(event) => setNumNodes(event.target.value)}
+        />
+        <button onClick={randomNotesHandler}>Get notes</button>
+        <button onClick={randomNotesFromSearchHandler}>
+          Get notes from search
+        </button>
+        <p>
+          Selected note:{" "}
+          {selectedNoteIndex === null ? "None" : selectedNoteIndex}
+        </p>
+      </SelectedNoteContext.Provider>
+    </AppContext.Provider>
   );
 }

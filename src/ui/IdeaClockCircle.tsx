@@ -1,8 +1,8 @@
 import React from "react";
-import Xarrow from "react-xarrows";
 import styled from "styled-components";
 import IdeaClockNote from "./IdeaClockNote";
 import { NoteInfo } from "./IdeaClockView";
+import LineTo from "react-lineto";
 
 interface StyledCircleProps {
   radius: number;
@@ -37,6 +37,7 @@ const IdeaClockCircle = ({
   noteCircleInfo,
   radius,
 }: IdeaClockCircleProps): JSX.Element => {
+  const [shouldShowArrow, setShouldShowArrow] = React.useState(false);
   return (
     <div>
       <StyledCircle radius={radius}>
@@ -45,20 +46,27 @@ const IdeaClockCircle = ({
             <>
               {noteCircleInfo.map((value, i) => {
                 return (
-                  <div
-                    key={i}
-                    id={`note-${i}`}
-                    className="IdeaClock__circleNote"
-                  >
+                  <div key={i} className={`IdeaClock__Note-${i}`}>
                     <IdeaClockNote key={i} noteInfo={value} />
                   </div>
                 );
               })}
-              <Xarrow start={"note-1"} end={"note-4"} />
+              {shouldShowArrow && (
+                <div>
+                  <LineTo
+                    from={"IdeaClock__Note-1"}
+                    to={"IdeaClock__Note-7"}
+                    borderColor="red"
+                  />
+                </div>
+              )}
             </>
           )}
         </StyledCircleHold>
       </StyledCircle>
+      <button onClick={() => setShouldShowArrow(!shouldShowArrow)}>
+        Show Arrow
+      </button>
     </div>
   );
 };
