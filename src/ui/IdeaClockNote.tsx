@@ -15,9 +15,11 @@ const StyledNote = styled.p`
   -moz-transition: all 2s linear;
   transition: transform 2s linear;
   color: white;
+  width: 120px;
   left: 0;
   border: 5px;
   border-radius: 10%;
+  text-align: center;
 `;
 
 interface IdeaClockNoteProps {

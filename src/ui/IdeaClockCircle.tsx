@@ -24,7 +24,7 @@ interface StyledCircleHoldProps {
 
 const StyledCircleHold = styled.div`
   position: absolute;
-  left: ${({ radius }: StyledCircleHoldProps) => radius - radius / 10}px;
+  left: ${({ radius }: StyledCircleHoldProps) => radius - radius / 5}px;
   top: ${({ radius }: StyledCircleHoldProps) => radius - radius / 10}px;
 `;
 
