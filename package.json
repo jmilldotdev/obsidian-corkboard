@@ -19,6 +19,7 @@
     "obsidian": "obsidianmd/obsidian-api#master",
     "react": "17.0.1",
     "react-dom": "17.0.1",
+    "react-xarrows": "^2.0.2",
     "styled-components": "^5.3.3",
     "tslib": "2.1.0"
   },

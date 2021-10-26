@@ -1,10 +1,16 @@
-import React from "react";
+import React, { useContext } from "react";
 import styled from "styled-components";
+import { SelectedNoteContext } from "./clockContext";
 import { NoteInfo } from "./IdeaClockView";
+
+interface StyledNoteProps {
+  isSelected: boolean;
+}
 
 const StyledNote = styled.p`
   position: absolute;
-  background: #d669bc;
+  background: ${({ isSelected }: StyledNoteProps) =>
+    isSelected ? "#9e8aff" : "#d669bc"};
   -webkit-transition: all 2s linear;
   -moz-transition: all 2s linear;
   transition: transform 2s linear;
@@ -12,22 +18,22 @@ const StyledNote = styled.p`
   left: 0;
   border: 5px;
   border-radius: 10%;
-  border-color: #d669bc;
 `;
 
 interface IdeaClockNoteProps {
   noteInfo: NoteInfo;
-  selectionCallback: (index: number) => void;
 }
 
-const IdeaClockNote = ({
-  noteInfo,
-  selectionCallback,
-}: IdeaClockNoteProps): JSX.Element => {
+const IdeaClockNote = ({ noteInfo }: IdeaClockNoteProps): JSX.Element => {
+  const index = noteInfo.index;
+  const selectedNote = useContext(SelectedNoteContext);
+  const isSelected = index === selectedNote.index;
+
   return (
     <StyledNote
+      isSelected={isSelected}
       onClick={() => {
-        selectionCallback(noteInfo.index);
+        selectedNote.setSelectedNoteIndex(index);
         console.log(noteInfo.path);
       }}
       style={{

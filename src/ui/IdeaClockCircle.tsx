@@ -1,4 +1,5 @@
 import React from "react";
+import Xarrow from "react-xarrows";
 import styled from "styled-components";
 import IdeaClockNote from "./IdeaClockNote";
 import { NoteInfo } from "./IdeaClockView";
@@ -30,30 +31,32 @@ const StyledCircleHold = styled.div`
 interface IdeaClockCircleProps {
   noteCircleInfo: NoteInfo[];
   radius: number;
-  selectionCallback: (index: number) => void;
 }
 
 const IdeaClockCircle = ({
   noteCircleInfo,
   radius,
-  selectionCallback,
 }: IdeaClockCircleProps): JSX.Element => {
   return (
     <div>
       <StyledCircle radius={radius}>
         <StyledCircleHold radius={radius}>
-          {noteCircleInfo &&
-            noteCircleInfo.map((value, i) => {
-              return (
-                <div key={i} className="IdeaClock__circleNote">
-                  <IdeaClockNote
+          {noteCircleInfo && (
+            <>
+              {noteCircleInfo.map((value, i) => {
+                return (
+                  <div
                     key={i}
-                    noteInfo={value}
-                    selectionCallback={selectionCallback}
-                  />
-                </div>
-              );
-            })}
+                    id={`note-${i}`}
+                    className="IdeaClock__circleNote"
+                  >
+                    <IdeaClockNote key={i} noteInfo={value} />
+                  </div>
+                );
+              })}
+              <Xarrow start={"note-1"} end={"note-4"} />
+            </>
+          )}
         </StyledCircleHold>
       </StyledCircle>
     </div>

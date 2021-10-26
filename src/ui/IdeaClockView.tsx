@@ -1,6 +1,7 @@
 import { TFile } from "obsidian";
 import React, { useState } from "react";
 import IdeaClockPlugin from "../index";
+import { SelectedNoteContext } from "./clockContext";
 import IdeaClockCircle from "./IdeaClockCircle";
 
 export interface NoteInfo {
@@ -12,6 +13,11 @@ export interface NoteInfo {
   rotateReverse: number;
 }
 
+export interface SelectedNote {
+  index: number | null;
+  setSelectedNoteIndex: (index: number) => void;
+}
+
 interface IdeaClockViewProps {
   plugin: IdeaClockPlugin;
 }
@@ -21,7 +27,9 @@ export default function IdeaClockView({
 }: IdeaClockViewProps): JSX.Element {
   const [numNodes, setNumNodes] = useState("12");
   const [noteCircleInfo, setNoteCircleInfo] = useState<NoteInfo[]>([]);
-  const [selectedNote, setSelectedNote] = useState<number | null>(null);
+  const [selectedNoteIndex, setSelectedNoteIndex] = useState<number | null>(
+    null
+  );
   const radius = 300;
 
   const randomNotesHandler = async (): Promise<void> => {
@@ -38,7 +46,7 @@ export default function IdeaClockView({
 
   const postFillHandler = (notes: TFile[]): void => {
     console.log(notes);
-    setSelectedNote(null);
+    setSelectedNoteIndex(null);
     buildCircle(notes);
   };
 
@@ -67,14 +75,15 @@ export default function IdeaClockView({
   };
 
   return (
-    <>
+    <SelectedNoteContext.Provider
+      value={{
+        index: selectedNoteIndex,
+        setSelectedNoteIndex,
+      }}
+    >
       <div className="IdeaClock__container">
         <div className="IdeaClock__notes">
-          <IdeaClockCircle
-            noteCircleInfo={noteCircleInfo}
-            radius={radius}
-            selectionCallback={setSelectedNote}
-          />
+          <IdeaClockCircle noteCircleInfo={noteCircleInfo} radius={radius} />
         </div>
       </div>
       <input
@@ -85,7 +94,9 @@ export default function IdeaClockView({
       <button onClick={randomNotesFromSearchHandler}>
         Get notes from search
       </button>
-      <p>Selected note: {selectedNote === null ? "None" : selectedNote}</p>
-    </>
+      <p>
+        Selected note: {selectedNoteIndex === null ? "None" : selectedNoteIndex}
+      </p>
+    </SelectedNoteContext.Provider>
   );
 }
