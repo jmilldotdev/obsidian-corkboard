@@ -36,20 +36,6 @@ export default function IdeaClockView({
     null
   );
   // const radius = 300;
-  const initialElements: Elements = [
-    {
-      id: "1",
-      type: "input",
-      data: { label: "Input 1" },
-      position: { x: 250, y: 0 },
-    },
-    { id: "2", data: { label: "Node 2" }, position: { x: 150, y: 100 } },
-    { id: "2a", data: { label: "Node 2a" }, position: { x: 0, y: 180 } },
-    { id: "3", data: { label: "Node 3" }, position: { x: 250, y: 200 } },
-    { id: "4", data: { label: "Node 4" }, position: { x: 400, y: 300 } },
-    { id: "3a", data: { label: "Node 3a" }, position: { x: 150, y: 300 } },
-    { id: "5", data: { label: "Node 5" }, position: { x: 250, y: 400 } },
-  ];
 
   const randomNotesHandler = async (): Promise<void> => {
     const notes = await plugin.handlegetRandomNotes(parseInt(numNodes));
