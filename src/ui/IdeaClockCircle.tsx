@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import IdeaClockNote from "./IdeaClockNote";
-import { ArrowEndpoints, NoteInfo } from "./IdeaClockView";
+import { NoteInfo } from "./IdeaClockView";
 
 interface StyledCircleProps {
   radius: number;
@@ -30,14 +30,11 @@ const StyledCircleHold = styled.div`
 interface IdeaClockCircleProps {
   noteCircleInfo: NoteInfo[];
   radius: number;
-  arrows: ArrowEndpoints[];
-  setArrowHandler: ({ start, end }: ArrowEndpoints) => void;
 }
 
 const IdeaClockCircle = ({
   noteCircleInfo,
   radius,
-  setArrowHandler,
 }: IdeaClockCircleProps): JSX.Element => {
   return (
     <div>
@@ -51,7 +48,6 @@ const IdeaClockCircle = ({
                     <IdeaClockNote
                       key={i}
                       noteInfo={value}
-                      addArrow={setArrowHandler}
                       noteId={`note-${i}`}
                     />
                   </div>

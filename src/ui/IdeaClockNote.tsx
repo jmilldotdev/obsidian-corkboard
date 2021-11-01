@@ -1,8 +1,7 @@
-import React, { useContext, useRef } from "react";
+import React, { useContext } from "react";
 import styled from "styled-components";
 import { AppContext, SelectedNoteContext } from "./clockContext";
 import { NoteInfo } from "./IdeaClockView";
-import { ArrowEndpoints } from "./IdeaClockView";
 
 interface StyledNoteProps {
   isSelected: boolean;
@@ -25,38 +24,18 @@ const StyledNote = styled.div`
 
 interface IdeaClockNoteProps {
   noteInfo: NoteInfo;
-  addArrow: ({ start, end }: ArrowEndpoints) => void;
   noteId: string;
 }
 
-const IdeaClockNote = ({
-  noteInfo,
-  addArrow,
-  noteId,
-}: IdeaClockNoteProps): JSX.Element => {
+const IdeaClockNote = ({ noteInfo }: IdeaClockNoteProps): JSX.Element => {
   const index = noteInfo.index;
   const selectedNote = useContext(SelectedNoteContext);
   const isSelected = index === selectedNote.index;
 
   const app = useContext(AppContext);
-  const ref0 = useRef();
-
-  const onDropHandler = (e: any) => {
-    if (e.dataTransfer.getData("arrow") === noteId) {
-      console.log(e.dataTransfer.getData("arrow"), noteId);
-    } else {
-      const refs = { start: e.dataTransfer.getData("arrow"), end: noteId };
-      addArrow(refs);
-      console.log("droped!", refs);
-    }
-  };
 
   return (
-    <div
-      ref={ref0}
-      onDragOver={(e) => e.preventDefault()}
-      onDrop={onDropHandler}
-    >
+    <div>
       <StyledNote
         isSelected={isSelected}
         onClick={(e) => {

@@ -1,8 +1,9 @@
 import { TFile } from "obsidian";
 import React, { useState } from "react";
-import ReactFlow, { Elements } from "react-flow-renderer";
+import { Elements } from "react-flow-renderer";
 import IdeaClockPlugin from "../index";
 import { AppContext, SelectedNoteContext } from "./clockContext";
+import IdeaClockFlow from "./IdeaClockFlow";
 
 export interface NoteInfo {
   index: number;
@@ -18,11 +19,6 @@ export interface SelectedNote {
   setSelectedNoteIndex: (index: number) => void;
 }
 
-export interface ArrowEndpoints {
-  start: string;
-  end: string;
-}
-
 interface IdeaClockViewProps {
   plugin: IdeaClockPlugin;
 }
@@ -35,7 +31,7 @@ export default function IdeaClockView({
   const [selectedNoteIndex, setSelectedNoteIndex] = useState<number | null>(
     null
   );
-  // const radius = 300;
+  const radius = 300;
 
   const randomNotesHandler = async (): Promise<void> => {
     const notes = await plugin.handlegetRandomNotes(parseInt(numNodes));
@@ -67,10 +63,10 @@ export default function IdeaClockView({
 
       items.push({
         id: i.toString(),
-        data: { label: notes[i].basename },
+        data: { label: notes[i].basename, path: notes[i].path },
         position: {
-          x: Math.cos((rotate * Math.PI) / 180) * 300,
-          y: Math.sin((rotate * Math.PI) / 180) * 300,
+          x: Math.cos((rotate * Math.PI) / 180) * radius,
+          y: Math.sin((rotate * Math.PI) / 180) * radius,
         },
       });
     }
@@ -89,7 +85,7 @@ export default function IdeaClockView({
           className="IdeaClock__container"
           style={{ width: "700px", height: "700px" }}
         >
-          {noteElements && <ReactFlow elements={noteElements} />}
+          {noteElements && <IdeaClockFlow initialElements={noteElements} />}
         </div>
         <input
           value={numNodes}
