@@ -1,9 +1,8 @@
 import { TFile } from "obsidian";
-import React, { useState } from "react";
-import { Elements } from "react-flow-renderer";
+import React, { useCallback, useContext, useEffect, useState } from "react";
+import ReactFlow, { addEdge, Elements } from "react-flow-renderer";
 import IdeaClockPlugin from "../index";
 import { AppContext, SelectedNoteContext } from "./clockContext";
-import IdeaClockFlow from "./IdeaClockFlow";
 
 export interface NoteInfo {
   index: number;
@@ -26,11 +25,13 @@ interface IdeaClockViewProps {
 export default function IdeaClockView({
   plugin,
 }: IdeaClockViewProps): JSX.Element {
+  const [reactflowInstance, setReactflowInstance] = useState(null);
   const [numNodes, setNumNodes] = useState("12");
-  const [noteElements, setNoteElements] = useState<Elements>();
+  const [noteElements, setNoteElements] = useState<Elements>([]);
   const [selectedNoteIndex, setSelectedNoteIndex] = useState<number | null>(
     null
   );
+  const app = useContext(AppContext);
   const radius = 300;
 
   const randomNotesHandler = async (): Promise<void> => {
@@ -73,6 +74,37 @@ export default function IdeaClockView({
     setNoteElements(items);
   };
 
+  const onConnect = useCallback(
+    (params) => setNoteElements((els) => addEdge({ ...params }, els)),
+    []
+  );
+
+  const onElementClick = (e: any, element: any) => {
+    const { id, data } = element;
+    console.log(element);
+    if (e.ctrlKey || e.metaKey) {
+      app.workspace.openLinkText(data.path, "", true, false);
+    } else {
+      setSelectedNoteIndex(id);
+    }
+  };
+
+  const onLoad = useCallback(
+    (rfi: any) => {
+      if (!reactflowInstance) {
+        setReactflowInstance(rfi);
+        console.log("flow loaded:", rfi);
+      }
+    },
+    [reactflowInstance]
+  );
+
+  useEffect(() => {
+    if (reactflowInstance && noteElements.length > 0) {
+      reactflowInstance.fitView();
+    }
+  }, [reactflowInstance, noteElements.length]);
+
   return (
     <AppContext.Provider value={plugin.app}>
       <SelectedNoteContext.Provider
@@ -85,7 +117,14 @@ export default function IdeaClockView({
           className="IdeaClock__container"
           style={{ width: "700px", height: "700px" }}
         >
-          {noteElements && <IdeaClockFlow initialElements={noteElements} />}
+          {noteElements && (
+            <ReactFlow
+              elements={noteElements}
+              onConnect={onConnect}
+              onElementClick={onElementClick}
+              onLoad={onLoad}
+            />
+          )}
         </div>
         <input
           value={numNodes}
