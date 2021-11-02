@@ -7,7 +7,12 @@ interface IdeaClockNoteNodeProps {
   data: {
     label: string;
     path: string;
+    selected: boolean;
   };
+}
+
+interface StyledIdeaClockNoteNode {
+  selected: boolean;
 }
 
 const StyledIdeaClockNoteNode = styled.div`
@@ -16,7 +21,8 @@ const StyledIdeaClockNoteNode = styled.div`
   line-height: normal;
   height: 60px;
   width: 120px;
-  background-color: #fff;
+  background-color: ${({ selected }: StyledIdeaClockNoteNode) =>
+    selected ? "#9e8aff" : "#fff"};
   color: black;
   box-shadow: 0 5px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
 `;
@@ -24,7 +30,7 @@ const StyledIdeaClockNoteNode = styled.div`
 const IdeaClockNoteNode = ({ data }: IdeaClockNoteNodeProps): JSX.Element => {
   return (
     <div>
-      <StyledIdeaClockNoteNode>
+      <StyledIdeaClockNoteNode selected={data.selected}>
         <Handle
           type="source"
           position={Position.Top}

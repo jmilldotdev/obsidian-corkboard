@@ -18,9 +18,6 @@ export default function IdeaClockView({
   const [reactflowInstance, setReactflowInstance] = useState(null);
   const [numNodes, setNumNodes] = useState("12");
   const [noteElements, setNoteElements] = useState<Elements>([]);
-  const [selectedNoteElements, setSelectedNoteElements] = useState<Elements>(
-    []
-  );
   const radius = 300;
 
   const randomNotesHandler = async (): Promise<void> => {
@@ -36,7 +33,6 @@ export default function IdeaClockView({
   };
 
   const postFillHandler = (notes: TFile[]): void => {
-    setSelectedNoteElements([]);
     buildCircle(notes);
   };
 
@@ -50,10 +46,15 @@ export default function IdeaClockView({
     let i;
     for (i = 0; i < num; i++) {
       const rotate = slice * i + start;
+      const str_i = i.toString();
 
       items.push({
-        id: i.toString(),
-        data: { label: notes[i].basename, path: notes[i].path },
+        id: str_i,
+        data: {
+          label: notes[i].basename,
+          path: notes[i].path,
+          selected: false,
+        },
         type: "noteNode",
         position: {
           x: Math.cos((rotate * Math.PI) / 180) * radius,
@@ -62,6 +63,27 @@ export default function IdeaClockView({
       });
     }
     setNoteElements(items);
+  };
+
+  const onSelectionChange = (selectedElements: Elements) => {
+    console.log("updateSelection", selectedElements);
+    const selectedElementIds =
+      selectedElements && selectedElements.map((element) => element.id);
+    const newElements = noteElements.map((element) => {
+      let selected = false;
+      if (selectedElementIds && selectedElementIds.includes(element.id)) {
+        selected = true;
+      }
+      return {
+        ...element,
+        data: {
+          ...element.data,
+          selected,
+        },
+      };
+    });
+    console.log("newElements", newElements);
+    setNoteElements(newElements);
   };
 
   const onConnect = useCallback((params) => {
@@ -79,7 +101,6 @@ export default function IdeaClockView({
     (rfi: any) => {
       if (!reactflowInstance) {
         setReactflowInstance(rfi);
-        console.log("flow loaded:", rfi);
       }
     },
     [reactflowInstance]
@@ -90,15 +111,6 @@ export default function IdeaClockView({
       reactflowInstance.fitView();
     }
   }, [reactflowInstance, noteElements.length]);
-
-  const displaySelectedNoteElements = (): string => {
-    console.log(selectedNoteElements);
-    return selectedNoteElements
-      .map((element) => {
-        return element.data.label;
-      })
-      .join(", ");
-  };
 
   return (
     <>
@@ -116,9 +128,7 @@ export default function IdeaClockView({
             elementsSelectable={true}
             selectionKeyCode={null}
             multiSelectionKeyCode={"Shift"}
-            onSelectionChange={(elements) => {
-              setSelectedNoteElements(elements);
-            }}
+            onSelectionChange={onSelectionChange}
             connectionMode={ConnectionMode.Loose}
           />
         )}
@@ -131,9 +141,6 @@ export default function IdeaClockView({
       <button onClick={randomNotesFromSearchHandler}>
         Get notes from search
       </button>
-      <p>
-        Selected notes:{selectedNoteElements && displaySelectedNoteElements()}
-      </p>
     </>
   );
 }
