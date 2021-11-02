@@ -1,22 +1,12 @@
 import { TFile } from "obsidian";
 import React, { useCallback, useEffect, useState } from "react";
-import ReactFlow, { addEdge, Elements } from "react-flow-renderer";
+import ReactFlow, {
+  addEdge,
+  ConnectionMode,
+  Elements,
+} from "react-flow-renderer";
 import IdeaClockPlugin from "../index";
-import { AppContext } from "./clockContext";
-
-export interface NoteInfo {
-  index: number;
-  title: string;
-  path: string;
-  rotate: number;
-  radius: number;
-  rotateReverse: number;
-}
-
-export interface SelectedNote {
-  index: number | null;
-  setSelectedNoteIndex: (index: number) => void;
-}
+import { nodeTypes } from "src/types";
 
 interface IdeaClockViewProps {
   plugin: IdeaClockPlugin;
@@ -64,6 +54,7 @@ export default function IdeaClockView({
       items.push({
         id: i.toString(),
         data: { label: notes[i].basename, path: notes[i].path },
+        type: "noteNode",
         position: {
           x: Math.cos((rotate * Math.PI) / 180) * radius,
           y: Math.sin((rotate * Math.PI) / 180) * radius,
@@ -73,10 +64,9 @@ export default function IdeaClockView({
     setNoteElements(items);
   };
 
-  const onConnect = useCallback(
-    (params) => setNoteElements((els) => addEdge({ ...params }, els)),
-    []
-  );
+  const onConnect = useCallback((params) => {
+    setNoteElements((els) => addEdge({ ...params }, els));
+  }, []);
 
   const onElementClick = (e: any, element: any) => {
     const { data } = element;
@@ -111,7 +101,7 @@ export default function IdeaClockView({
   };
 
   return (
-    <AppContext.Provider value={plugin.app}>
+    <>
       <div
         className="IdeaClock__container"
         style={{ width: "700px", height: "700px" }}
@@ -119,6 +109,7 @@ export default function IdeaClockView({
         {noteElements && (
           <ReactFlow
             elements={noteElements}
+            nodeTypes={nodeTypes}
             onConnect={onConnect}
             onElementClick={onElementClick}
             onLoad={onLoad}
@@ -128,6 +119,7 @@ export default function IdeaClockView({
             onSelectionChange={(elements) => {
               setSelectedNoteElements(elements);
             }}
+            connectionMode={ConnectionMode.Loose}
           />
         )}
       </div>
@@ -142,6 +134,6 @@ export default function IdeaClockView({
       <p>
         Selected notes:{selectedNoteElements && displaySelectedNoteElements()}
       </p>
-    </AppContext.Provider>
+    </>
   );
 }

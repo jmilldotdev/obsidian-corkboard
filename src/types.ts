@@ -12,5 +12,5 @@ export interface SearchView extends View {
 export const VIEW_TYPE = "idea-clock-view";
 
 export const nodeTypes = {
-  special: IdeaClockNoteNode,
+  noteNode: IdeaClockNoteNode,
 };
