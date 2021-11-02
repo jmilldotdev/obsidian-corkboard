@@ -1,8 +1,8 @@
 import { TFile } from "obsidian";
-import React, { useCallback, useContext, useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import ReactFlow, { addEdge, Elements } from "react-flow-renderer";
 import IdeaClockPlugin from "../index";
-import { AppContext, SelectedNoteContext } from "./clockContext";
+import { AppContext } from "./clockContext";
 
 export interface NoteInfo {
   index: number;
@@ -28,10 +28,9 @@ export default function IdeaClockView({
   const [reactflowInstance, setReactflowInstance] = useState(null);
   const [numNodes, setNumNodes] = useState("12");
   const [noteElements, setNoteElements] = useState<Elements>([]);
-  const [selectedNoteIndex, setSelectedNoteIndex] = useState<number | null>(
-    null
+  const [selectedNoteElements, setSelectedNoteElements] = useState<Elements>(
+    []
   );
-  const app = useContext(AppContext);
   const radius = 300;
 
   const randomNotesHandler = async (): Promise<void> => {
@@ -47,7 +46,7 @@ export default function IdeaClockView({
   };
 
   const postFillHandler = (notes: TFile[]): void => {
-    setSelectedNoteIndex(null);
+    setSelectedNoteElements([]);
     buildCircle(notes);
   };
 
@@ -80,12 +79,9 @@ export default function IdeaClockView({
   );
 
   const onElementClick = (e: any, element: any) => {
-    const { id, data } = element;
-    console.log(element);
+    const { data } = element;
     if (e.ctrlKey || e.metaKey) {
-      app.workspace.openLinkText(data.path, "", true, false);
-    } else {
-      setSelectedNoteIndex(id);
+      plugin.app.workspace.openLinkText(data.path, "", true, false);
     }
   };
 
@@ -105,40 +101,47 @@ export default function IdeaClockView({
     }
   }, [reactflowInstance, noteElements.length]);
 
+  const displaySelectedNoteElements = (): string => {
+    console.log(selectedNoteElements);
+    return selectedNoteElements
+      .map((element) => {
+        return element.data.label;
+      })
+      .join(", ");
+  };
+
   return (
     <AppContext.Provider value={plugin.app}>
-      <SelectedNoteContext.Provider
-        value={{
-          index: selectedNoteIndex,
-          setSelectedNoteIndex,
-        }}
+      <div
+        className="IdeaClock__container"
+        style={{ width: "700px", height: "700px" }}
       >
-        <div
-          className="IdeaClock__container"
-          style={{ width: "700px", height: "700px" }}
-        >
-          {noteElements && (
-            <ReactFlow
-              elements={noteElements}
-              onConnect={onConnect}
-              onElementClick={onElementClick}
-              onLoad={onLoad}
-            />
-          )}
-        </div>
-        <input
-          value={numNodes}
-          onChange={(event) => setNumNodes(event.target.value)}
-        />
-        <button onClick={randomNotesHandler}>Get notes</button>
-        <button onClick={randomNotesFromSearchHandler}>
-          Get notes from search
-        </button>
-        <p>
-          Selected note:{" "}
-          {selectedNoteIndex === null ? "None" : selectedNoteIndex}
-        </p>
-      </SelectedNoteContext.Provider>
+        {noteElements && (
+          <ReactFlow
+            elements={noteElements}
+            onConnect={onConnect}
+            onElementClick={onElementClick}
+            onLoad={onLoad}
+            elementsSelectable={true}
+            selectionKeyCode={null}
+            multiSelectionKeyCode={"Shift"}
+            onSelectionChange={(elements) => {
+              setSelectedNoteElements(elements);
+            }}
+          />
+        )}
+      </div>
+      <input
+        value={numNodes}
+        onChange={(event) => setNumNodes(event.target.value)}
+      />
+      <button onClick={randomNotesHandler}>Get notes</button>
+      <button onClick={randomNotesFromSearchHandler}>
+        Get notes from search
+      </button>
+      <p>
+        Selected notes:{selectedNoteElements && displaySelectedNoteElements()}
+      </p>
     </AppContext.Provider>
   );
 }
