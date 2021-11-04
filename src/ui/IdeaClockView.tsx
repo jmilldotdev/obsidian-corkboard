@@ -8,6 +8,7 @@ import ReactFlow, {
 } from "react-flow-renderer";
 import IdeaClockPlugin from "../index";
 import { nodeTypes } from "src/types";
+import SettingsForm from "./SettingsForm";
 
 interface IdeaClockViewProps {
   plugin: IdeaClockPlugin;
@@ -21,26 +22,6 @@ export default function IdeaClockView({
   const [noteElements, setNoteElements] = useState<Elements>([]);
   const [selectedNoteIndices, setSelectedNoteIndices] = useState<string[]>([]);
   const radius = 300;
-
-  const randomNotesHandler = async (): Promise<void> => {
-    const notes = await plugin.handlegetRandomNotes(parseInt(numNodes));
-    postFillHandler(notes);
-  };
-
-  const randomNotesFromSearchHandler = async (): Promise<void> => {
-    const notes = await plugin.handlegetRandomNotesFromSearch(
-      parseInt(numNodes)
-    );
-    postFillHandler(notes);
-  };
-
-  const postFillHandler = (notes: TFile[]): void => {
-    if (selectedNoteIndices && selectedNoteIndices.length > 0) {
-      rebuildCircle(notes);
-    } else {
-      buildCircle(notes);
-    }
-  };
 
   const buildCircle = (notes: TFile[]) => {
     const num = parseInt(numNodes);
@@ -186,7 +167,7 @@ export default function IdeaClockView({
     <>
       <div
         className="IdeaClock__container"
-        style={{ width: "700px", height: "700px" }}
+        style={{ width: "1080px", height: "800px", backgroundColor: "#a3a3c2" }}
       >
         {noteElements && (
           <ReactFlow
@@ -205,14 +186,15 @@ export default function IdeaClockView({
           />
         )}
       </div>
-      <input
-        value={numNodes}
-        onChange={(event) => setNumNodes(event.target.value)}
+      <SettingsForm
+        plugin={plugin}
+        noteElements={noteElements}
+        numNodes={numNodes}
+        setNumNodes={setNumNodes}
+        selectedNoteIndices={selectedNoteIndices}
+        buildCircle={buildCircle}
+        rebuildCircle={rebuildCircle}
       />
-      <button onClick={randomNotesHandler}>Get notes</button>
-      <button onClick={randomNotesFromSearchHandler}>
-        Get notes from search
-      </button>
     </>
   );
 }
