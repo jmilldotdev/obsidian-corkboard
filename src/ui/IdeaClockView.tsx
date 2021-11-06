@@ -1,5 +1,5 @@
 import { TFile } from "obsidian";
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useState } from "react";
 import ReactFlow, {
   addEdge,
   ConnectionMode,
@@ -7,7 +7,7 @@ import ReactFlow, {
   FlowElement,
 } from "react-flow-renderer";
 import IdeaClockPlugin from "../index";
-import { nodeTypes } from "src/types";
+import { nodeTypes } from "./types";
 import SettingsForm from "./SettingsForm";
 
 interface IdeaClockViewProps {
@@ -22,6 +22,10 @@ export default function IdeaClockView({
   const [noteElements, setNoteElements] = useState<Elements>([]);
   const [selectedNoteIndices, setSelectedNoteIndices] = useState<string[]>([]);
   const radius = 300;
+
+  onunload = () => {
+    console.log("unload");
+  };
 
   const buildCircle = (notes: TFile[]) => {
     const num = parseInt(numNodes);
@@ -90,6 +94,7 @@ export default function IdeaClockView({
   const onSelectionChange = (selectedElements: Elements) => {
     const selectedElementIds =
       selectedElements && selectedElements.map((element) => element.id);
+    console.log(selectedElementIds);
     setSelectedNoteIndices(selectedElementIds);
     const newElements = noteElements.map((element) => {
       let selected = false;
@@ -104,6 +109,7 @@ export default function IdeaClockView({
         },
       };
     });
+    console.log(newElements);
     setNoteElements(newElements);
   };
 
@@ -157,17 +163,11 @@ export default function IdeaClockView({
     [noteElements]
   );
 
-  useEffect(() => {
-    if (reactflowInstance && noteElements && noteElements.length > 0) {
-      reactflowInstance.fitView({ padding: 0.1 });
-    }
-  }, [reactflowInstance, noteElements.length]);
-
   return (
     <>
       <div
         className="IdeaClock__container"
-        style={{ width: "1080px", height: "800px", backgroundColor: "#a3a3c2" }}
+        style={{ width: "1080px", height: "800px" }}
       >
         {noteElements && (
           <ReactFlow

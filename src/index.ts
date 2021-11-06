@@ -29,12 +29,21 @@ class MyReactView extends ItemView {
   }
 
   async onOpen(): Promise<void> {
+    console.log("onOpen");
     this.reactComponent = React.createElement(IdeaClockView, {
       plugin: this.plugin,
     });
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     ReactDOM.render(this.reactComponent, (this as any).contentEl);
+  }
+
+  async onClose(): Promise<void> {
+    console.log("onClose");
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const { contentEl } = this as any;
+    contentEl.empty();
+    return Promise.resolve();
   }
 }
 
