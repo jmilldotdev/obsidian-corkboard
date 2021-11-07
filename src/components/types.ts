@@ -11,7 +11,6 @@ export interface CorkboardNote {
   file?: TFile;
   label: string;
   path: string;
-  selected: boolean;
 }
 
 export enum SpreadType {
