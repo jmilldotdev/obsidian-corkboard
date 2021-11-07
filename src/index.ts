@@ -2,16 +2,16 @@ import { ItemView, Plugin, TFile, WorkspaceLeaf } from "obsidian";
 import React from "react";
 import ReactDOM from "react-dom";
 
-import IdeaClockView from "./ui/IdeaClockView";
+import Corkboard from "./components/Corkboard";
 import { randomElements } from "./util";
-import { IdeaClockNotice } from "./IdeaClockNotice";
+import { CorkboardNotice } from "./CorkboardNotice";
 import { SearchView, VIEW_TYPE } from "./types";
 
-class MyReactView extends ItemView {
+class CorkboardView extends ItemView {
   private reactComponent: React.ReactElement;
-  plugin: IdeaClockPlugin;
+  plugin: CorkboardPlugin;
 
-  constructor(leaf: WorkspaceLeaf, plugin: IdeaClockPlugin) {
+  constructor(leaf: WorkspaceLeaf, plugin: CorkboardPlugin) {
     super(leaf);
     this.plugin = plugin;
   }
@@ -21,7 +21,7 @@ class MyReactView extends ItemView {
   }
 
   getDisplayText(): string {
-    return "Idea Clock";
+    return "Corkboard";
   }
 
   getIcon(): string {
@@ -30,35 +30,27 @@ class MyReactView extends ItemView {
 
   async onOpen(): Promise<void> {
     console.log("onOpen");
-    this.reactComponent = React.createElement(IdeaClockView, {
+    this.reactComponent = React.createElement(Corkboard, {
       plugin: this.plugin,
     });
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     ReactDOM.render(this.reactComponent, (this as any).contentEl);
   }
-
-  async onClose(): Promise<void> {
-    console.log("onClose");
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const { contentEl } = this as any;
-    contentEl.empty();
-    return Promise.resolve();
-  }
 }
 
-export default class IdeaClockPlugin extends Plugin {
-  private view: MyReactView;
+export default class CorkboardPlugin extends Plugin {
+  private view: CorkboardView;
 
   async onload(): Promise<void> {
     this.registerView(
       VIEW_TYPE,
-      (leaf: WorkspaceLeaf) => (this.view = new MyReactView(leaf, this))
+      (leaf: WorkspaceLeaf) => (this.view = new CorkboardView(leaf, this))
     );
 
     this.addCommand({
-      id: "obsidian-idea-clock-open",
-      name: "Open Idea Clock",
+      id: "obsidian-corkboard-open",
+      name: "Open Corkboard",
       callback: () => {
         this.app.workspace.getLeaf().setViewState({ type: VIEW_TYPE });
       },
@@ -79,14 +71,14 @@ export default class IdeaClockPlugin extends Plugin {
       ?.view as SearchView;
 
     if (!searchView) {
-      new IdeaClockNotice("The core search plugin is not enabled", 5000);
+      new CorkboardNotice("The core search plugin is not enabled", 5000);
       return;
     }
 
     const searchResults = searchView.dom.getFiles();
 
     if (!searchResults.length) {
-      new IdeaClockNotice("No search results available", 5000);
+      new CorkboardNotice("No search results available", 5000);
       return;
     }
 
@@ -101,7 +93,7 @@ export default class IdeaClockPlugin extends Plugin {
     const markdownFiles = files.filter((file) => file.extension === "md");
 
     if (!markdownFiles.length) {
-      new IdeaClockNotice(
+      new CorkboardNotice(
         "Can't open note. No markdown files available to open.",
         5000
       );

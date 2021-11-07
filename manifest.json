@@ -1,7 +1,7 @@
 {
-  "id": "obsidian-idea-clock",
-  "name": "Obsidian Idea Clock",
-  "description": "Obsidian Idea Clock",
+  "id": "obsidian-corkboard",
+  "name": "Corkboard",
+  "description": "Obsidian Corkboard",
   "version": "0.0.0",
   "author": "Jonathan Miller",
   "authorUrl": "https://github.com/jmilldotdev/",

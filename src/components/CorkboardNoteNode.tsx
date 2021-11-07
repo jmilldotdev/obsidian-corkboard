@@ -3,7 +3,23 @@ import React from "react";
 import { Handle, Position } from "react-flow-renderer";
 import styled from "styled-components";
 
-interface IdeaClockNoteNodeProps {
+interface StyledCorkboardNoteNode {
+  selected: boolean;
+}
+
+const StyledCorkboardNoteNode = styled.div`
+  font-size: 11px;
+  text-align: center;
+  line-height: normal;
+  height: 60px;
+  width: 120px;
+  background-color: ${({ selected }: StyledCorkboardNoteNode) =>
+    selected ? "#9e8aff" : "#fff"};
+  color: black;
+  box-shadow: 0 5px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+`;
+
+interface CorkboardNoteNodeProps {
   data: {
     label: string;
     path: string;
@@ -11,26 +27,10 @@ interface IdeaClockNoteNodeProps {
   };
 }
 
-interface StyledIdeaClockNoteNode {
-  selected: boolean;
-}
-
-const StyledIdeaClockNoteNode = styled.div`
-  font-size: 11px;
-  text-align: center;
-  line-height: normal;
-  height: 60px;
-  width: 120px;
-  background-color: ${({ selected }: StyledIdeaClockNoteNode) =>
-    selected ? "#9e8aff" : "#fff"};
-  color: black;
-  box-shadow: 0 5px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
-`;
-
-const IdeaClockNoteNode = ({ data }: IdeaClockNoteNodeProps): JSX.Element => {
+const CorkboardNoteNode = ({ data }: CorkboardNoteNodeProps): JSX.Element => {
   return (
     <div>
-      <StyledIdeaClockNoteNode selected={data.selected}>
+      <StyledCorkboardNoteNode selected={data.selected}>
         <Handle
           type="source"
           position={Position.Top}
@@ -44,9 +44,9 @@ const IdeaClockNoteNode = ({ data }: IdeaClockNoteNodeProps): JSX.Element => {
           id="b"
           isConnectable={true}
         />
-      </StyledIdeaClockNoteNode>
+      </StyledCorkboardNoteNode>
     </div>
   );
 };
 
-export default IdeaClockNoteNode;
+export default CorkboardNoteNode;

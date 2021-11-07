@@ -8,4 +8,4 @@ export interface SearchView extends View {
   dom: SearchDOM;
 }
 
-export const VIEW_TYPE = "idea-clock-view";
+export const VIEW_TYPE = "corkboard-view";

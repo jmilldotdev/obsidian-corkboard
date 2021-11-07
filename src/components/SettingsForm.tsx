@@ -1,8 +1,12 @@
 import { TFile } from "obsidian";
 import React from "react";
+import { useStoreState, useStoreActions } from "react-flow-renderer";
 import styled from "styled-components";
-import IdeaClockPlugin from "../index";
-import { Elements } from "react-flow-renderer";
+import CorkboardPlugin from "../index";
+import { SpreadType } from "./types";
+import { buildClockSpread } from "./spreads/ClockSpread";
+import SpreadTypeSelector from "./SpreadTypeSelector";
+import { logTitles } from "../helpers/replaceSelection";
 
 const StyledSettingsForm = styled.div`
   position: absolute;
@@ -15,24 +19,25 @@ const StyledSettingsForm = styled.div`
 `;
 
 interface SettingsFormProps {
-  plugin: IdeaClockPlugin;
-  noteElements: Elements;
+  plugin: CorkboardPlugin;
   numNodes: string;
   setNumNodes: (numNodes: string) => void;
-  selectedNoteIndices: string[];
-  buildCircle: (notes: TFile[]) => void;
-  rebuildCircle: (notes: TFile[]) => void;
 }
 
 const SettingsForm = ({
   plugin,
-  noteElements,
   numNodes,
   setNumNodes,
-  selectedNoteIndices,
-  buildCircle,
-  rebuildCircle,
 }: SettingsFormProps): JSX.Element => {
+  const nodes = useStoreState((store) => store.nodes);
+  const setNodes = useStoreActions((actions) => actions.setElements);
+  const setSelectedElements = useStoreActions(
+    (actions) => actions.setSelectedElements
+  );
+  const [spreadType, setSpreadType] = React.useState<SpreadType>(
+    SpreadType.Clock
+  );
+
   const randomNotesHandler = async (): Promise<void> => {
     const notes = await plugin.handlegetRandomNotes(parseInt(numNodes));
     postFillHandler(notes);
@@ -46,11 +51,14 @@ const SettingsForm = ({
   };
 
   const postFillHandler = (notes: TFile[]): void => {
-    if (selectedNoteIndices && selectedNoteIndices.length > 0) {
-      rebuildCircle(notes);
-    } else {
-      buildCircle(notes);
+    let newElements;
+    if (spreadType == SpreadType.Clock) {
+      newElements = buildClockSpread(notes, parseInt(numNodes), 300);
     }
+    setNodes([]);
+    setSelectedElements([]);
+    console.log("New elements: ", newElements);
+    setNodes(newElements);
   };
 
   return (
@@ -63,7 +71,8 @@ const SettingsForm = ({
       <button onClick={randomNotesFromSearchHandler}>
         Get notes from search
       </button>
-      <button onClick={() => console.log(noteElements)}>Show notes</button>
+      <button onClick={() => logTitles(nodes)}>Show notes</button>
+      <SpreadTypeSelector setSpreadType={setSpreadType} />
     </StyledSettingsForm>
   );
 };

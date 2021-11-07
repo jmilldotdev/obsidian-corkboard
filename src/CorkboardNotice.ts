@@ -1,7 +1,7 @@
 import { Notice } from "obsidian";
 
-export class IdeaClockNotice extends Notice {
+export class CorkboardNotice extends Notice {
   constructor(message: string, timeout?: number) {
-    super("Idea Clock: " + message, timeout);
+    super("Corkboard: " + message, timeout);
   }
 }
