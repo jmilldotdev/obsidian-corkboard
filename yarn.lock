@@ -1519,10 +1519,10 @@ electron-to-chromium@^1.3.649:
   resolved "https://registry.yarnpkg.com/electron-to-chromium/-/electron-to-chromium-1.3.690.tgz#54df63ec42fba6b8e9e05fe4be52caeeedb6e634"
   integrity sha512-zPbaSv1c8LUKqQ+scNxJKv01RYFkVVF1xli+b+3Ty8ONujHjAMg+t/COmdZqrtnS1gT+g4hbSodHillymt1Lww==
 
-electron@^11.1.0:
-  version "11.5.0"
-  resolved "https://registry.yarnpkg.com/electron/-/electron-11.5.0.tgz#f1650543b9d8f2047d3807755bdb120153ed210f"
-  integrity sha512-WjNDd6lGpxyiNjE3LhnFCAk/D9GIj1rU3GSDealVShhkkkPR3Vh4q8ErXGDl1OAO/faomVa10KoFPUN/pLbNxg==
+electron@^9.1.0:
+  version "9.4.4"
+  resolved "https://registry.yarnpkg.com/electron/-/electron-9.4.4.tgz#2a74a0655a74bd326216672c5ae6ed3a44451446"
+  integrity sha512-dcPlTrMWQu5xuSm6sYV42KK/BRIqh3erM8v/WtZqaDmG7pkCeJpvw26Dgbqhdt78XmqqGiN96giEe6A3S9vpAQ==
   dependencies:
     "@electron/get" "^1.0.1"
     "@types/node" "^12.0.12"
@@ -2553,24 +2553,24 @@ rc@^1.0.1, rc@^1.1.6:
     minimist "^1.2.0"
     strip-json-comments "~2.0.1"
 
-react-devtools-core@4.21.0:
-  version "4.21.0"
-  resolved "https://registry.yarnpkg.com/react-devtools-core/-/react-devtools-core-4.21.0.tgz#a54c9a0fd7261491e616d6c87d1869e011d8521d"
-  integrity sha512-clGWwJHV5MHwTwYyKc+7FZHwzdbzrD2/AoZSkicUcr6YLc3Za9a9FaLhccWDHfjQ+ron9yzNhDT6Tv+FiPkD3g==
+react-devtools-core@4.10.4:
+  version "4.10.4"
+  resolved "https://registry.yarnpkg.com/react-devtools-core/-/react-devtools-core-4.10.4.tgz#6d6e8cb87b281ab0267c4bbe396c0ee348213d78"
+  integrity sha512-N3RjSX9aumqxOhwExUkIqExMeizyxvbddkmkZ6pIVLaF6spV0aMmZfdqXFTpdSUUG5k71Q2EVlDtXO8a5y6Gtg==
   dependencies:
     shell-quote "^1.6.1"
     ws "^7"
 
-react-devtools@^4.21.0:
-  version "4.21.0"
-  resolved "https://registry.yarnpkg.com/react-devtools/-/react-devtools-4.21.0.tgz#cccf59c873078b5201d5f09abc883f1229769a3f"
-  integrity sha512-aUQG1QlF+4Cs3w2YBpAO75nJ17Vx/VBBoXxDi0VusAVbI8d2eQSMcpx+TFYxIDrY7w/6Tg/0SvKdnp60Usllhg==
+react-devtools@<4.11.0:
+  version "4.10.4"
+  resolved "https://registry.yarnpkg.com/react-devtools/-/react-devtools-4.10.4.tgz#62ecf9fe205f6bb31ed00462848554e5f464e6e8"
+  integrity sha512-Hr/yzBrFI1zbCtViNNiE5z0+PpTyNYXfDOcsTcAKbDmJ/oTuih4WcbU1NRymaLE8bju77qlIWToklNxRpapRZw==
   dependencies:
     cross-spawn "^5.0.1"
-    electron "^11.1.0"
+    electron "^9.1.0"
     ip "^1.1.4"
     minimist "^1.2.3"
-    react-devtools-core "4.21.0"
+    react-devtools-core "4.10.4"
     update-notifier "^2.1.0"
 
 react-dom@17.0.1:

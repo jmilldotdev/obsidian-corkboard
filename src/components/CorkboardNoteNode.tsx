@@ -23,14 +23,14 @@ interface CorkboardNoteNodeProps {
   data: {
     label: string;
     path: string;
-    selected: boolean;
   };
+  selected: boolean;
 }
 
-const CorkboardNoteNode = ({ data }: CorkboardNoteNodeProps): JSX.Element => {
+const CorkboardNoteNode = ({ data, selected }: CorkboardNoteNodeProps): JSX.Element => {
   return (
     <div>
-      <StyledCorkboardNoteNode selected={data.selected}>
+      <StyledCorkboardNoteNode selected={selected}>
         <Handle
           type="source"
           position={Position.Top}
