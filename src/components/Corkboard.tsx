@@ -66,7 +66,6 @@ export default function Corkboard({ plugin }: CorkboardProps): JSX.Element {
             file: null,
             label: "",
             path: "",
-            selected: false,
           },
           type: noteNodeTypeString,
           position,

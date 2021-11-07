@@ -1,5 +1,13 @@
 import "react-devtools";
-import { ItemView, Plugin, TFile, WorkspaceLeaf } from "obsidian";
+import {
+  App,
+  ItemView,
+  Plugin,
+  PluginSettingTab,
+  Setting,
+  TFile,
+  WorkspaceLeaf,
+} from "obsidian";
 import React from "react";
 import ReactDOM from "react-dom";
 
@@ -7,6 +15,8 @@ import Corkboard from "./components/Corkboard";
 import { randomElements } from "./util";
 import { CorkboardNotice } from "./CorkboardNotice";
 import { SearchView, VIEW_TYPE } from "./types";
+import LinkSuggestor from "./LinkSuggestor";
+import { FileSuggest } from "./suggesters/FileSuggester";
 
 class CorkboardView extends ItemView {
   private reactComponent: React.ReactElement;
@@ -49,6 +59,8 @@ export default class CorkboardPlugin extends Plugin {
       (leaf: WorkspaceLeaf) => (this.view = new CorkboardView(leaf, this))
     );
 
+    this.registerEditorSuggest(new LinkSuggestor(this));
+
     this.addCommand({
       id: "obsidian-corkboard-open",
       name: "Open Corkboard",
@@ -56,6 +68,8 @@ export default class CorkboardPlugin extends Plugin {
         this.app.workspace.getLeaf().setViewState({ type: VIEW_TYPE });
       },
     });
+
+    this.addSettingTab(new CorkboardSettingTab(this.app, this));
   }
 
   handlegetRandomNotes = async (quantity: number): Promise<TFile[]> => {
@@ -105,4 +119,29 @@ export default class CorkboardPlugin extends Plugin {
     console.log(notes);
     return notes;
   };
+}
+
+class CorkboardSettingTab extends PluginSettingTab {
+  plugin: CorkboardPlugin;
+
+  constructor(app: App, plugin: CorkboardPlugin) {
+    super(app, plugin);
+    this.plugin = plugin;
+  }
+
+  display(): void {
+    const { containerEl } = this;
+
+    containerEl.empty();
+
+    containerEl.createEl("h2", { text: "Settings for my awesome plugin." });
+
+    new Setting(this.containerEl)
+      .setName("Template folder location")
+      .setDesc("Files in this folder will be available as templates.")
+      .addSearch((cb) => {
+        new FileSuggest(this.app, cb.inputEl, this.plugin);
+        cb.setPlaceholder("Example: folder1/folder2");
+      });
+  }
 }
