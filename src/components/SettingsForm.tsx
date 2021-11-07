@@ -1,6 +1,6 @@
 import { TFile } from "obsidian";
 import React from "react";
-import { useStoreState, useStoreActions } from "react-flow-renderer";
+import { useStoreState, useStoreActions, Elements } from "react-flow-renderer";
 import styled from "styled-components";
 import CorkboardPlugin from "../index";
 import { SpreadType } from "./types";
@@ -22,15 +22,16 @@ interface SettingsFormProps {
   plugin: CorkboardPlugin;
   numNodes: string;
   setNumNodes: (numNodes: string) => void;
+  setElements: (elements: Elements) => void;
 }
 
 const SettingsForm = ({
   plugin,
   numNodes,
   setNumNodes,
+  setElements,
 }: SettingsFormProps): JSX.Element => {
   const nodes = useStoreState((store) => store.nodes);
-  const setNodes = useStoreActions((actions) => actions.setElements);
   const setSelectedElements = useStoreActions(
     (actions) => actions.setSelectedElements
   );
@@ -55,10 +56,10 @@ const SettingsForm = ({
     if (spreadType == SpreadType.Clock) {
       newElements = buildClockSpread(notes, parseInt(numNodes), 300);
     }
-    setNodes([]);
+    setElements([]);
     setSelectedElements([]);
     console.log("New elements: ", newElements);
-    setNodes(newElements);
+    setElements(newElements);
   };
 
   return (

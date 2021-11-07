@@ -8,18 +8,10 @@ export const nodeTypes = {
 export const noteNodeTypeString = "noteNode";
 
 export interface CorkboardNote {
-  id: string;
-  data: {
-    file: TFile;
-    label: string;
-    path: string;
-    selected: boolean;
-  };
-  type: string;
-  postition: {
-    x: number;
-    y: number;
-  };
+  file?: TFile;
+  label: string;
+  path: string;
+  selected: boolean;
 }
 
 export enum SpreadType {

@@ -8,7 +8,7 @@ import ReactFlow, {
   removeElements,
 } from "react-flow-renderer";
 import CorkboardPlugin from "../index";
-import { CorkboardNote, nodeTypes } from "./types";
+import { CorkboardNote, nodeTypes, noteNodeTypeString } from "./types";
 import SettingsForm from "./SettingsForm";
 
 interface CorkboardProps {
@@ -19,10 +19,6 @@ export default function Corkboard({ plugin }: CorkboardProps): JSX.Element {
   const [reactflowInstance, setReactflowInstance] = useState(null);
   const [numNodes, setNumNodes] = useState("12");
   const [elements, setElements] = useState<Elements<CorkboardNote>>([]);
-
-  const onSelectionChange = (selectedElements: Elements) => {
-    console.log("Selection changed:", selectedElements);
-  };
 
   const onConnect = useCallback((params) => {
     setElements((els) => addEdge({ ...params }, els));
@@ -50,35 +46,36 @@ export default function Corkboard({ plugin }: CorkboardProps): JSX.Element {
     [reactflowInstance]
   );
 
-  // const onDoubleClick = useCallback(
-  //   (e: any) => {
-  //     console.log(e);
-  //     if (e.target.className == "react-flow__pane") {
-  //       const currentTargetRect = e.currentTarget.getBoundingClientRect();
-  //       const position = {
-  //         x: e.screenX - 0.5 * currentTargetRect.width - 50,
-  //         y: e.screenY - 0.5 * currentTargetRect.height + 115,
-  //       };
-  //       console.log(position);
-  //       const newElements = noteElements.map((e) => {
-  //         return { ...e };
-  //       });
-  //       console.log(newElements);
-  //       newElements.push({
-  //         id: `${noteElements.length}`,
-  //         data: {
-  //           label: "",
-  //           path: "",
-  //           selected: false,
-  //         },
-  //         type: "noteNode",
-  //         position,
-  //       });
-  //       setNoteElements(newElements);
-  //     }
-  //   },
-  //   [noteElements]
-  // );
+  const onDoubleClick = useCallback(
+    (e: any) => {
+      console.log(e);
+      if (e.target.className == "react-flow__pane") {
+        const currentTargetRect = e.currentTarget.getBoundingClientRect();
+        const position = {
+          x: e.screenX - 0.5 * currentTargetRect.width - 50,
+          y: e.screenY - 0.5 * currentTargetRect.height + 115,
+        };
+        console.log(position);
+        const newElements = elements.map((e) => {
+          return { ...e };
+        });
+        console.log(newElements);
+        newElements.push({
+          id: `${elements.length}`,
+          data: {
+            file: null,
+            label: "",
+            path: "",
+            selected: false,
+          },
+          type: noteNodeTypeString,
+          position,
+        });
+        setElements(newElements);
+      }
+    },
+    [elements]
+  );
 
   return (
     <ReactFlowProvider>
@@ -98,9 +95,8 @@ export default function Corkboard({ plugin }: CorkboardProps): JSX.Element {
             selectionKeyCode={null}
             deleteKeyCode={"Backspace"}
             multiSelectionKeyCode={"Shift"}
-            onSelectionChange={onSelectionChange}
             connectionMode={ConnectionMode.Loose}
-            // onDoubleClick={onDoubleClick}
+            onDoubleClick={onDoubleClick}
             zoomOnDoubleClick={false}
           />
         )}
@@ -109,6 +105,7 @@ export default function Corkboard({ plugin }: CorkboardProps): JSX.Element {
         plugin={plugin}
         numNodes={numNodes}
         setNumNodes={setNumNodes}
+        setElements={setElements}
       />
       <button onClick={() => console.log(reactflowInstance.getElements())}>
         Show notes
