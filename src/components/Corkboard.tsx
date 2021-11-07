@@ -10,6 +10,7 @@ import ReactFlow, {
 import CorkboardPlugin from "../index";
 import { CorkboardNote, nodeTypes, noteNodeTypeString } from "./types";
 import SettingsForm from "./SettingsForm";
+import { FileSuggesterInput } from "./FileSuggesterInput";
 
 interface CorkboardProps {
   plugin: CorkboardPlugin;
@@ -109,6 +110,7 @@ export default function Corkboard({ plugin }: CorkboardProps): JSX.Element {
       <button onClick={() => console.log(reactflowInstance.getElements())}>
         Show notes
       </button>
+      <FileSuggesterInput plugin={plugin} />
     </ReactFlowProvider>
   );
 }
