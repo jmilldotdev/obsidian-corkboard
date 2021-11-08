@@ -1,11 +1,12 @@
 import { TFile } from "obsidian";
-import React from "react";
+import React, { useContext } from "react";
 import { useStoreState, useStoreActions, Elements } from "react-flow-renderer";
 import styled from "styled-components";
 import CorkboardPlugin from "../index";
 import { SpreadType } from "./types";
 import { buildClockSpread } from "./spreads/ClockSpread";
 import SpreadTypeSelector from "./SpreadTypeSelector";
+import { EditModeContext } from "./context";
 
 const StyledSettingsForm = styled.div`
   position: absolute;
@@ -39,6 +40,7 @@ const SettingsForm = ({
   const [spreadType, setSpreadType] = React.useState<SpreadType>(
     SpreadType.Clock
   );
+  const { editMode, setEditMode } = useContext(EditModeContext);
 
   const getSelectedElementIds = () => {
     return selectedElements.map((element) => element.id);
@@ -113,6 +115,10 @@ const SettingsForm = ({
       <button onClick={randomNotesFromSearchHandler}>
         Get notes from search
       </button>
+      <br />
+      <label>Edit Mode:</label>
+      <input type="checkbox" onChange={() => setEditMode(!editMode)} />
+      <br />
       <SpreadTypeSelector setSpreadType={setSpreadType} />
     </StyledSettingsForm>
   );

@@ -10,7 +10,7 @@ import ReactFlow, {
 import CorkboardPlugin from "../index";
 import { CorkboardNote, nodeTypes, noteNodeTypeString } from "./types";
 import SettingsForm from "./SettingsForm";
-import { AppContext } from "./context";
+import { AppContext, EditModeContext } from "./context";
 
 interface CorkboardProps {
   plugin: CorkboardPlugin;
@@ -20,6 +20,7 @@ export default function Corkboard({ plugin }: CorkboardProps): JSX.Element {
   const [reactflowInstance, setReactflowInstance] = useState(null);
   const [numNodes, setNumNodes] = useState("12");
   const [elements, setElements] = useState<Elements<CorkboardNote>>([]);
+  const [editMode, setEditMode] = useState(false);
 
   const onConnect = useCallback((params) => {
     setElements((els) => addEdge({ ...params }, els));
@@ -83,37 +84,39 @@ export default function Corkboard({ plugin }: CorkboardProps): JSX.Element {
   return (
     <ReactFlowProvider>
       <AppContext.Provider value={plugin.app}>
-        <div
-          className="Corkboard__container"
-          style={{ width: "1080px", height: "800px" }}
-        >
-          {elements && (
-            <ReactFlow
-              elements={elements}
-              nodeTypes={nodeTypes}
-              onConnect={onConnect}
-              onElementClick={onElementClick}
-              onElementsRemove={onElementsRemove}
-              onLoad={onLoad}
-              elementsSelectable={true}
-              selectionKeyCode={null}
-              deleteKeyCode={"Backspace"}
-              multiSelectionKeyCode={"Shift"}
-              connectionMode={ConnectionMode.Loose}
-              onDoubleClick={onDoubleClick}
-              zoomOnDoubleClick={false}
-            />
-          )}
-        </div>
-        <SettingsForm
-          plugin={plugin}
-          numNodes={numNodes}
-          setNumNodes={setNumNodes}
-          setElements={setElements}
-        />
-        <button onClick={() => console.log(reactflowInstance.getElements())}>
-          Show notes
-        </button>
+        <EditModeContext.Provider value={{ editMode, setEditMode }}>
+          <div
+            className="Corkboard__container"
+            style={{ width: "1080px", height: "800px" }}
+          >
+            {elements && (
+              <ReactFlow
+                elements={elements}
+                nodeTypes={nodeTypes}
+                onConnect={onConnect}
+                onElementClick={onElementClick}
+                onElementsRemove={onElementsRemove}
+                onLoad={onLoad}
+                elementsSelectable={true}
+                selectionKeyCode={null}
+                deleteKeyCode={"Backspace"}
+                multiSelectionKeyCode={"Shift"}
+                connectionMode={ConnectionMode.Loose}
+                onDoubleClick={onDoubleClick}
+                zoomOnDoubleClick={false}
+              />
+            )}
+          </div>
+          <SettingsForm
+            plugin={plugin}
+            numNodes={numNodes}
+            setNumNodes={setNumNodes}
+            setElements={setElements}
+          />
+          <button onClick={() => console.log(reactflowInstance.getElements())}>
+            Show notes
+          </button>
+        </EditModeContext.Provider>
       </AppContext.Provider>
     </ReactFlowProvider>
   );

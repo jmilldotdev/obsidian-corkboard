@@ -1,6 +1,7 @@
-import React from "react";
+import React, { useContext } from "react";
 import { Handle, Position } from "react-flow-renderer";
 import styled from "styled-components";
+import { EditModeContext } from "./context";
 import { FileSuggesterInput } from "./FileSuggesterInput";
 
 interface StyledCorkboardNoteNode {
@@ -31,6 +32,7 @@ const CorkboardNoteNode = ({
   data,
   selected,
 }: CorkboardNoteNodeProps): JSX.Element => {
+  const { editMode } = useContext(EditModeContext);
   return (
     <div>
       <StyledCorkboardNoteNode selected={selected}>
@@ -41,13 +43,13 @@ const CorkboardNoteNode = ({
           isConnectable={true}
         />
         {data.label}
-        <FileSuggesterInput />
         <Handle
           type="source"
           position={Position.Bottom}
           id="b"
           isConnectable={true}
         />
+        {editMode && <FileSuggesterInput />}
       </StyledCorkboardNoteNode>
     </div>
   );

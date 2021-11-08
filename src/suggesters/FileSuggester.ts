@@ -3,7 +3,7 @@
 import { App, TAbstractFile, TFile } from "obsidian";
 import { TextInputSuggest } from "./suggest";
 
-export class FileSuggest extends TextInputSuggest<TFile> {
+export class FileSuggester extends TextInputSuggest<TFile> {
   constructor(public app: App, public inputEl: HTMLInputElement) {
     super(app, inputEl);
   }
@@ -36,8 +36,7 @@ export class FileSuggest extends TextInputSuggest<TFile> {
 
   selectSuggestion(file: TFile): void {
     this.inputEl.value = file.path;
-    this.inputEl.trigger("input");
-    console.log("selected file", file);
+    this.inputEl.trigger("submit");
     this.close();
   }
 }
