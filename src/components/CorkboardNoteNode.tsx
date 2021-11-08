@@ -1,7 +1,7 @@
 import React from "react";
-
 import { Handle, Position } from "react-flow-renderer";
 import styled from "styled-components";
+import { FileSuggesterInput } from "./FileSuggesterInput";
 
 interface StyledCorkboardNoteNode {
   selected: boolean;
@@ -27,7 +27,10 @@ interface CorkboardNoteNodeProps {
   selected: boolean;
 }
 
-const CorkboardNoteNode = ({ data, selected }: CorkboardNoteNodeProps): JSX.Element => {
+const CorkboardNoteNode = ({
+  data,
+  selected,
+}: CorkboardNoteNodeProps): JSX.Element => {
   return (
     <div>
       <StyledCorkboardNoteNode selected={selected}>
@@ -38,6 +41,7 @@ const CorkboardNoteNode = ({ data, selected }: CorkboardNoteNodeProps): JSX.Elem
           isConnectable={true}
         />
         {data.label}
+        <FileSuggesterInput />
         <Handle
           type="source"
           position={Position.Bottom}

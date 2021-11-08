@@ -10,7 +10,7 @@ import ReactFlow, {
 import CorkboardPlugin from "../index";
 import { CorkboardNote, nodeTypes, noteNodeTypeString } from "./types";
 import SettingsForm from "./SettingsForm";
-import { FileSuggesterInput } from "./FileSuggesterInput";
+import { AppContext } from "./context";
 
 interface CorkboardProps {
   plugin: CorkboardPlugin;
@@ -29,6 +29,9 @@ export default function Corkboard({ plugin }: CorkboardProps): JSX.Element {
     const { data } = element;
     if (e.ctrlKey || e.metaKey) {
       plugin.app.workspace.openLinkText(data.path, "", true, false);
+    }
+    if (e.altKey) {
+      console.log("editing");
     }
   };
 
@@ -53,8 +56,8 @@ export default function Corkboard({ plugin }: CorkboardProps): JSX.Element {
       if (e.target.className == "react-flow__pane") {
         const currentTargetRect = e.currentTarget.getBoundingClientRect();
         const position = {
-          x: e.screenX - 0.5 * currentTargetRect.width - 50,
-          y: e.screenY - 0.5 * currentTargetRect.height + 115,
+          x: e.screenX - 0.5 * currentTargetRect.width,
+          y: e.screenY - 0.5 * currentTargetRect.height + 80,
         };
         console.log(position);
         const newElements = elements.map((e) => {
@@ -79,38 +82,39 @@ export default function Corkboard({ plugin }: CorkboardProps): JSX.Element {
 
   return (
     <ReactFlowProvider>
-      <div
-        className="Corkboard__container"
-        style={{ width: "1080px", height: "800px" }}
-      >
-        {elements && (
-          <ReactFlow
-            elements={elements}
-            nodeTypes={nodeTypes}
-            onConnect={onConnect}
-            onElementClick={onElementClick}
-            onElementsRemove={onElementsRemove}
-            onLoad={onLoad}
-            elementsSelectable={true}
-            selectionKeyCode={null}
-            deleteKeyCode={"Backspace"}
-            multiSelectionKeyCode={"Shift"}
-            connectionMode={ConnectionMode.Loose}
-            onDoubleClick={onDoubleClick}
-            zoomOnDoubleClick={false}
-          />
-        )}
-      </div>
-      <SettingsForm
-        plugin={plugin}
-        numNodes={numNodes}
-        setNumNodes={setNumNodes}
-        setElements={setElements}
-      />
-      <button onClick={() => console.log(reactflowInstance.getElements())}>
-        Show notes
-      </button>
-      <FileSuggesterInput plugin={plugin} />
+      <AppContext.Provider value={plugin.app}>
+        <div
+          className="Corkboard__container"
+          style={{ width: "1080px", height: "800px" }}
+        >
+          {elements && (
+            <ReactFlow
+              elements={elements}
+              nodeTypes={nodeTypes}
+              onConnect={onConnect}
+              onElementClick={onElementClick}
+              onElementsRemove={onElementsRemove}
+              onLoad={onLoad}
+              elementsSelectable={true}
+              selectionKeyCode={null}
+              deleteKeyCode={"Backspace"}
+              multiSelectionKeyCode={"Shift"}
+              connectionMode={ConnectionMode.Loose}
+              onDoubleClick={onDoubleClick}
+              zoomOnDoubleClick={false}
+            />
+          )}
+        </div>
+        <SettingsForm
+          plugin={plugin}
+          numNodes={numNodes}
+          setNumNodes={setNumNodes}
+          setElements={setElements}
+        />
+        <button onClick={() => console.log(reactflowInstance.getElements())}>
+          Show notes
+        </button>
+      </AppContext.Provider>
     </ReactFlowProvider>
   );
 }

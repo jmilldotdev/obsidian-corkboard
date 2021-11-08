@@ -2,36 +2,26 @@
 
 import { App, TAbstractFile, TFile } from "obsidian";
 import { TextInputSuggest } from "./suggest";
-import { get_tfiles_from_folder } from "../util";
-import CorkboardPlugin from "../index";
 
 export class FileSuggest extends TextInputSuggest<TFile> {
-  constructor(
-    public app: App,
-    public inputEl: HTMLInputElement,
-    private plugin: CorkboardPlugin
-  ) {
+  constructor(public app: App, public inputEl: HTMLInputElement) {
     super(app, inputEl);
   }
 
   get_folder(): string {
-    return this.plugin.app.vault.getRoot().path;
+    return this.app.vault.getRoot().path;
   }
 
-  getSuggestions(input_str: string): TFile[] {
-    const all_files = get_tfiles_from_folder(this.app, this.get_folder());
-    if (!all_files) {
-      return [];
-    }
-
+  getSuggestions(inputStr: string): TFile[] {
+    const abstractFiles = this.app.vault.getAllLoadedFiles();
     const files: TFile[] = [];
-    const lower_input_str = input_str.toLowerCase();
+    const lowerCaseInputStr = inputStr.toLowerCase();
 
-    all_files.forEach((file: TAbstractFile) => {
+    abstractFiles.forEach((file: TAbstractFile) => {
       if (
         file instanceof TFile &&
         file.extension === "md" &&
-        file.path.toLowerCase().contains(lower_input_str)
+        file.path.toLowerCase().contains(lowerCaseInputStr)
       ) {
         files.push(file);
       }
@@ -47,6 +37,7 @@ export class FileSuggest extends TextInputSuggest<TFile> {
   selectSuggestion(file: TFile): void {
     this.inputEl.value = file.path;
     this.inputEl.trigger("input");
+    console.log("selected file", file);
     this.close();
   }
 }

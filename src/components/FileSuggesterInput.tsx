@@ -1,25 +1,20 @@
-import { Setting } from "obsidian";
 import * as React from "react";
-import CorkboardPlugin from "../index";
 import { FileSuggest } from "../suggesters/FileSuggester";
+import { AppContext } from "./context";
 
-interface FileSuggesterInputProps {
-  plugin: CorkboardPlugin;
-}
-
-export const FileSuggesterInput = ({
-  plugin,
-}: FileSuggesterInputProps): React.ReactElement => {
-  const ref = React.useRef<HTMLDivElement>();
+export const FileSuggesterInput = (): React.ReactElement => {
+  const ref = React.useRef<HTMLInputElement>();
+  const app = React.useContext(AppContext);
 
   React.useEffect(() => {
     if (ref.current) {
-      new Setting(ref.current).addSearch((cb) => {
-        new FileSuggest(plugin.app, cb.inputEl, plugin);
-        cb.setPlaceholder("Example: folder1/folder2");
-      });
+      new FileSuggest(app, ref.current);
     }
   });
 
-  return <div ref={ref} />;
+  return (
+    <div>
+      <input ref={ref} />
+    </div>
+  );
 };
