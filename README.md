@@ -1,25 +1,19 @@
-# obsidian-react-starter
+# Obsidian Corkboard
 
-A starter template for creating an [Obsidian](https://obsidian.md/) plugin with [ReactJS](https://reactjs.org/).
+A visual canvas to work with your Obsidian notes
 
-## Features
+![App Screenshot](public/Screenshot.png)
 
-This project comes preconfigured with [Typescript](https://www.typescriptlang.org/), [Babel](https://babeljs.io/), and [Rollup.js](https://www.rollupjs.org).
+## Usage
 
-## Getting Started
+Click 'Get Random Notes' or 'Get Random Notes from Search' to populate the canvas with random note cards.
 
-Click "use this template" to create your own fork of this repo. Make sure to reference [the official sample plugin](https://github.com/obsidianmd/obsidian-sample-plugin) for information about how to get started with the Obsidian API and how to submit your plugin to the Community Plugin Gallery.
+Double click to create a new card.
 
-```bash
-# for local development
-npm install
-npm run dev
+Click a note to select it, shift+click to select multiple. Click either 'Get Random' button to replace your selection. They will replace the whole canvas if nothing is selected
 
-# for a production bundle
-npm install
-npm run build
-```
+Click the 'Edit Mode' checkbox to add an input to each note card. You can type to find a new note, then select it to replace the existing note on the card. Click 'Edit Mode' checkbox again to hide the inputs.
 
-## Stats
+Click and drag from one handle (small black dot) on a card to another to create a link between cards (this is only on the Corkboard canvas, not in your notes themselves.)
 
-The production output of this sample plugin is **~200 KB**.
+This is in super early alpha, so please let me know about any bugs and suggestions.
