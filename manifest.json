@@ -2,7 +2,7 @@
   "id": "obsidian-corkboard",
   "name": "Corkboard",
   "description": "Obsidian Corkboard",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "author": "Jonathan Miller",
   "authorUrl": "https://github.com/jmilldotdev/",
   "isDesktopOnly": true,
