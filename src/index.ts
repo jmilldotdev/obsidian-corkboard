@@ -30,7 +30,6 @@ class CorkboardView extends ItemView {
   }
 
   async onOpen(): Promise<void> {
-    console.log("onOpen");
     this.reactComponent = React.createElement(Corkboard, {
       plugin: this.plugin,
     });
@@ -102,7 +101,6 @@ export default class CorkboardPlugin extends Plugin {
     }
 
     const notes = randomElements(markdownFiles, quantity);
-    console.log(notes);
     return notes;
   };
 }

@@ -31,9 +31,6 @@ export default function Corkboard({ plugin }: CorkboardProps): JSX.Element {
     if (e.ctrlKey || e.metaKey) {
       plugin.app.workspace.openLinkText(data.path, "", true, false);
     }
-    if (e.altKey) {
-      console.log("editing");
-    }
   };
 
   const onElementsRemove = (elementsToRemove: Elements) =>
@@ -41,8 +38,6 @@ export default function Corkboard({ plugin }: CorkboardProps): JSX.Element {
 
   const onLoad = useCallback(
     (rfi: any) => {
-      console.log("On Load");
-      console.log(elements);
       if (!reactflowInstance) {
         setReactflowInstance(rfi);
       }
@@ -53,18 +48,15 @@ export default function Corkboard({ plugin }: CorkboardProps): JSX.Element {
 
   const onDoubleClick = useCallback(
     (e: any) => {
-      console.log(e);
       if (e.target.className == "react-flow__pane") {
         const currentTargetRect = e.currentTarget.getBoundingClientRect();
         const position = {
           x: e.screenX - 0.5 * currentTargetRect.width,
           y: e.screenY - 0.5 * currentTargetRect.height + 80,
         };
-        console.log(position);
         const newElements = elements.map((e) => {
           return { ...e };
         });
-        console.log(newElements);
         newElements.push({
           id: `${elements.length}`,
           data: {
@@ -113,9 +105,6 @@ export default function Corkboard({ plugin }: CorkboardProps): JSX.Element {
             setNumNodes={setNumNodes}
             setElements={setElements}
           />
-          <button onClick={() => console.log(reactflowInstance.getElements())}>
-            Show notes
-          </button>
         </EditModeContext.Provider>
       </AppContext.Provider>
     </ReactFlowProvider>

@@ -27,10 +27,8 @@ export const FileSuggesterInput = (): React.ReactElement => {
   );
 
   const handleSubmit = (e: any) => {
-    console.log("Handling input: ", e);
     const selectedElementId = selectedElements[0].id;
     const selectedFile = e.target.value;
-    console.log(selectedFile);
     const newElements = nodes.map((node) => {
       if (node.id === selectedElementId) {
         return {

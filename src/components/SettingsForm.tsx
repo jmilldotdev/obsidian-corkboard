@@ -66,7 +66,6 @@ const SettingsForm = ({
   };
 
   const replaceSelectionHandler = (notes: TFile[]) => {
-    console.log("replaceSelectionHandler");
     const selectedElementIds = getSelectedElementIds();
     let i = 0;
     const newElements = nodes.map((node) => {
@@ -85,7 +84,6 @@ const SettingsForm = ({
       }
       return node;
     });
-    console.log(newElements);
     setElements(newElements);
   };
 

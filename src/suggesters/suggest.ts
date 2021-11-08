@@ -155,7 +155,6 @@ export abstract class TextInputSuggest<T> implements ISuggestOwner<T> {
   open(container: HTMLElement, inputEl: HTMLElement): void {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     (<any>this.app).keymap.pushScope(this.scope);
-    console.log("popper opened");
 
     container.appendChild(this.suggestEl);
     this.popper = createPopper(inputEl, this.suggestEl, {
