@@ -7,12 +7,17 @@ export const buildClockSpread = (
   numNodes: number,
   radius: number
 ): Elements<CorkboardNote> => {
+  let numEls = numNodes;
+  if (numNodes > notes.length) {
+    numEls = notes.length;
+  }
+
   const start = -90;
-  const slice = 360 / numNodes;
+  const slice = 360 / numEls;
 
   const elements: Elements = [];
   let i;
-  for (i = 0; i < numNodes; i++) {
+  for (i = 0; i < numEls; i++) {
     const rotate = slice * i + start;
     const str_i = i.toString();
 

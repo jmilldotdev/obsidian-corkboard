@@ -1,7 +1,9 @@
+import { ItemView } from "obsidian";
+import { hoverPreview } from "obsidian-community-lib";
 import React, { useContext } from "react";
 import { Handle, Position } from "react-flow-renderer";
 import styled from "styled-components";
-import { EditModeContext } from "./context";
+import { AppContext, EditModeContext } from "./context";
 import { FileSuggesterInput } from "./FileSuggesterInput";
 
 interface StyledCorkboardNoteNode {
@@ -33,25 +35,30 @@ const CorkboardNoteNode = ({
   selected,
 }: CorkboardNoteNodeProps): JSX.Element => {
   const { editMode } = useContext(EditModeContext);
+  const app = useContext(AppContext);
+
+  const onMouseOver = (e: any): void => {
+    const activeView = app.workspace.activeLeaf.view as ItemView;
+    hoverPreview(e, activeView, data.label);
+  };
+
   return (
-    <div>
-      <StyledCorkboardNoteNode selected={selected}>
-        <Handle
-          type="source"
-          position={Position.Top}
-          id="a"
-          isConnectable={true}
-        />
-        {data.label}
-        <Handle
-          type="source"
-          position={Position.Bottom}
-          id="b"
-          isConnectable={true}
-        />
-        {editMode && <FileSuggesterInput />}
-      </StyledCorkboardNoteNode>
-    </div>
+    <StyledCorkboardNoteNode selected={selected} onMouseOver={onMouseOver}>
+      <Handle
+        type="source"
+        position={Position.Top}
+        id="a"
+        isConnectable={true}
+      />
+      {data.label}
+      <Handle
+        type="source"
+        position={Position.Bottom}
+        id="b"
+        isConnectable={true}
+      />
+      {editMode && <FileSuggesterInput />}
+    </StyledCorkboardNoteNode>
   );
 };
 

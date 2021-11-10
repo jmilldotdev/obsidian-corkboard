@@ -71,15 +71,22 @@ export default class CorkboardPlugin extends Plugin {
       ?.view as SearchView;
 
     if (!searchView) {
-      new CorkboardNotice("The core search plugin is not enabled", 5000);
+      new CorkboardNotice("The core search plugin is not enabled", 3000);
       return;
     }
 
     const searchResults = searchView.dom.getFiles();
 
     if (!searchResults.length) {
-      new CorkboardNotice("No search results available", 5000);
+      new CorkboardNotice("No search results available", 3000);
       return;
+    }
+
+    if (searchResults.length < quantity) {
+      new CorkboardNotice(
+        "Not enough search results available. Setting partial spread.",
+        3000
+      );
     }
 
     const notes = await this.getRandomNotes(searchResults, quantity);
