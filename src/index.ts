@@ -1,4 +1,3 @@
-import "react-devtools";
 import { ItemView, Plugin, TFile, WorkspaceLeaf } from "obsidian";
 import React from "react";
 import ReactDOM from "react-dom";
